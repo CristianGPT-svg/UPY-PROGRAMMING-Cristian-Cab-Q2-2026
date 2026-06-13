@@ -1,0 +1,110 @@
+Classwork #08 - Numerical Integration
+PPP (Pseudocode)
+
+# INPUT
+Get a (left endpoint, as text) from user
+Get b (right endpoint, as text) from user
+Get f_x (function in terms of X) from user
+Get method (LRM, RRM, MRM or TRAP) from user
+Get mode (D for Default, C for Custom, A for Auto-adjust) from user
+Get exact (exact value of the integral, used for error comparison) from user
+
+IF mode equals "C":
+    Get n (number of subintervals) from user
+ENDIF
+
+IF mode equals "A":
+    Get threshold (target relative error in percent) from user
+ENDIF
+
+# PROCESS
+
+# Convert interval endpoints
+IF "pi" is in a:
+    a <- replace "pi" with the value of pi in a, then evaluate
+ELSE:
+    a <- convert a to decimal number
+ENDIF
+
+IF "pi" is in b:
+    b <- replace "pi" with the value of pi in b, then evaluate
+ELSE:
+    b <- convert b to decimal number
+ENDIF
+
+# Subprocess: Integrate(a, b, f_x, method, n)
+#   Computes the area under the curve using the chosen method
+DEFINE Integrate(a, b, f_x, method, n):
+    h <- (b - a) / n
+    area <- 0
+    constant <- 0
+    shift <- 0
+
+    IF method equals "RRM":
+        shift <- 1
+    ENDIF
+
+    IF method equals "MRM":
+        constant <- h / 2
+    ENDIF
+
+    IF method equals "TRAP":
+        f0 <- f_x with X replaced by a
+        area <- area + (h / 2) * evaluate(f0)
+
+        i <- 1
+        WHILE i < n:
+            xi <- a + i * h
+            fxi <- f_x with X replaced by xi
+            area <- area + (h / 2) * 2 * evaluate(fxi)
+            i <- i + 1
+        ENDWHILE
+
+        fxn <- f_x with X replaced by b
+        area <- area + (h / 2) * evaluate(fxn)
+    ELSE:
+        i <- shift
+        WHILE i < n + shift:
+            xi <- a + i * h
+            height <- f_x with X replaced by (xi + constant)
+            area <- area + h * evaluate(height)
+            i <- i + 1
+        ENDWHILE
+    ENDIF
+
+    RETURN area
+END DEFINE
+
+# Mode selection
+IF mode equals "D":
+    # Default mode: fixed number of subintervals
+    n <- 100
+    area <- Integrate(a, b, f_x, method, n)
+
+ELSE IF mode equals "C":
+    # Custom mode: n was already provided in the INPUT section
+    area <- Integrate(a, b, f_x, method, n)
+
+ELSE:
+    # Auto-adjust mode: increase n until error meets the threshold
+    n <- 10
+    area <- Integrate(a, b, f_x, method, n)
+    rel_error <- |exact - area| / |exact| * 100
+
+    WHILE rel_error > threshold:
+        n <- n * 2
+        area <- Integrate(a, b, f_x, method, n)
+        rel_error <- |exact - area| / |exact| * 100
+    ENDWHILE
+ENDIF
+
+# Error calculation
+abs_error <- |exact - area|
+rel_error <- |exact - area| / |exact| * 100
+
+# OUTPUT
+Display "The integral of " + f_x + " from " + a + " to " + b
+Display "using " + method + " with n = " + n + " is: " + area
+Display "Exact value: " + exact
+Display "Absolute error: " + abs_error
+Display "Relative error: " + rel_error + " %"

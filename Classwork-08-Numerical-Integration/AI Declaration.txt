@@ -1,0 +1,22 @@
+
+========================================
+AI USE DECLARATION
+========================================
+
+Student name: Cristian Alejandro Cab Xool
+AI used: Claude
+Date of use: 2026-06-12
+
+Purpose: Assistance designing the pseudocode (PPP), generating the
+flowchart image, and writing/debugging the Python program for the
+numerical integration tool (LRM, RRM, MRM, TRAP methods with Default,
+Custom, and Auto-adjust modes).
+
+Prompt used (summary): I asked for help building a numerical integration
+program with three modes (Default, Custom, Auto-adjust) following the
+class style of using eval() and string replacement to evaluate user-defined
+functions. I requested the corresponding pseudocode (PPP) and flowchart
+matching the program's logic and INPUT/PROCESS/OUTPUT order.
+
+Note: I reviewed and tested the code myself (all three modes ran
+successfully) before submitting it.
