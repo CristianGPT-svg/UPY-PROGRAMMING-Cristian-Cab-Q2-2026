@@ -1,0 +1,203 @@
+============================================================
+PPP - Pseudocode
+Classwork #10 - School Management System
+============================================================
+
+# ---- PURPOSE ----
+# Simulate a school login system with three roles:
+# student, professor, coordinator.
+# No functions used — all logic is inline.
+
+# ---- PREPARATION (Data) ----
+
+# Define a fixed tuple of subjects (never changes during execution)
+subjects ← (
+    "Discrete Mathematics",
+    "Programming",
+    "English II",
+    "Differential Calculus",
+    "Probability and Statistics",
+    "Computer and Server Architecture",
+    "Socio-Emotional Skills and Conflict Management"
+)
+
+# Define users dictionary with password, role, and name
+users ← {
+    'jperez':   password='1234', rol='student',     name='Juan Perez'
+    'dromo':    password='1234', rol='student',     name='Daniela Romo'
+    'mjuarez':  password='1234', rol='student',     name='Mauricio Juarez'
+    'mlopez':   password='1234', rol='student',     name='Maria Lopez'
+    'euc':      password='1234', rol='student',     name='Ernesto Uc'
+    'cbalam':   password='1234', rol='student',     name='Carlos Balam'
+    'jpedrozo': password='1234', rol='professor',   name='Jorge Pedrozo'
+    'dgamboa':  password='1234', rol='coordinator', name='Didier Gamboa'
+}
+
+# Define notes dictionary; keys match student usernames in users
+notes ← {
+    'jperez':  Discrete Mathematics=8.5, Programming=9.2, English II=9.0,
+               Differential Calculus=7.8, Probability and Statistics=8.3,
+               Computer and Server Architecture=6.8,
+               Socio-Emotional Skills and Conflict Management=9.5
+    'dromo':   Discrete Mathematics=9.0, Programming=6.7, English II=9.4,
+               Differential Calculus=6.2, Probability and Statistics=9.1,
+               Computer and Server Architecture=6.5,
+               Socio-Emotional Skills and Conflict Management=9.8
+    'mjuarez': Discrete Mathematics=7.5, Programming=8.0, English II=8.5,
+               Differential Calculus=7.0, Probability and Statistics=7.8,
+               Computer and Server Architecture=6.2,
+               Socio-Emotional Skills and Conflict Management=8.9
+    'mlopez':  Discrete Mathematics=9.5, Programming=9.8, English II=9.2,
+               Differential Calculus=9.0, Probability and Statistics=9.6,
+               Computer and Server Architecture=9.4,
+               Socio-Emotional Skills and Conflict Management=10.0
+    'euc':     Discrete Mathematics=8.2, Programming=6.9, English II=8.8,
+               Differential Calculus=6.0, Probability and Statistics=6.4,
+               Computer and Server Architecture=8.1,
+               Socio-Emotional Skills and Conflict Management=9.0
+    'cbalam':  Discrete Mathematics=8.8, Programming=9.0, English II=8.5,
+               Differential Calculus=6.6, Probability and Statistics=8.9,
+               Computer and Server Architecture=8.7,
+               Socio-Emotional Skills and Conflict Management=9.2
+}
+
+------------------------------------------------------------
+MAIN PROGRAM - Login Loop
+------------------------------------------------------------
+
+PRINT "School Management System"
+
+# Keep asking until valid credentials are entered (unlimited attempts)
+REPEAT
+    READ username
+    READ password
+
+    IF username IN users AND users[username][password] = password THEN
+
+        name ← users[username][name]
+        rol  ← users[username][rol]
+        PRINT "Welcome, " + name + " (" + rol + ")"
+
+        # ── STUDENT ──────────────────────────────────────────
+        IF rol = 'student' THEN
+
+            grades ← notes[username]
+
+            # Build passed set (grade >= 7.0) and pending (set difference)
+            passed  ← { s FOR EACH s IN subjects IF grades[s] >= 7.0 }
+            pending ← set(subjects) - passed
+
+            # Print table with only passed subjects
+            PRINT "Report Card: " + name
+            PRINT table header row
+            FOR EACH subject IN subjects DO
+                IF subject IN passed THEN
+                    PRINT subject + grades[subject] as table row
+                END IF
+            END FOR
+            PRINT table footer
+
+            # Print passed count and list
+            PRINT "Passed subjects (" + count(passed) + " of " + count(subjects) + "):"
+            FOR EACH s IN subjects DO
+                IF s IN passed THEN
+                    PRINT "[+] " + s
+                END IF
+            END FOR
+
+            # Print pending list
+            IF pending is not empty THEN
+                PRINT "Pending subjects (" + count(pending) + "):"
+                FOR EACH s IN subjects DO
+                    IF s IN pending THEN
+                        PRINT "[-] " + s
+                    END IF
+                END FOR
+            ELSE
+                PRINT "All subjects passed!"
+            END IF
+
+        # ── PROFESSOR ─────────────────────────────────────────
+        ELSE IF rol = 'professor' THEN
+
+            # Print all students filtered by role
+            FOR EACH user, data IN users DO
+                IF data[rol] = 'student' THEN
+                    PRINT user + data[name]
+                END IF
+            END FOR
+
+            # Loop until professor types 'exit'
+            REPEAT
+                READ student
+
+                IF student = 'exit' THEN
+                    EXIT LOOP
+                END IF
+
+                IF student NOT IN notes THEN
+                    PRINT "Not found. Try again."
+                    CONTINUE
+                END IF
+
+                # Print current grades as table
+                FOR EACH subject IN subjects DO
+                    PRINT subject + notes[student][subject] as table row
+                END FOR
+
+                READ subject
+                IF subject NOT IN subjects THEN
+                    PRINT "Invalid. Try again."
+                    CONTINUE
+                END IF
+
+                READ new_grade
+
+                # Ask for confirmation before saving
+                PRINT "Change " + subject + " from " + current + " to " + new_grade + "?"
+                READ confirm
+
+                IF confirm = 'yes' THEN
+                    notes[student][subject] ← new_grade
+                    PRINT "Grade updated successfully."
+                ELSE
+                    PRINT "Change cancelled."
+                END IF
+
+            UNTIL student = 'exit'
+
+        # ── COORDINATOR ───────────────────────────────────────
+        ELSE IF rol = 'coordinator' THEN
+
+            # Print professors filtered by role
+            FOR EACH user, data IN users DO
+                IF data[rol] = 'professor' THEN
+                    PRINT user + data[name]
+                END IF
+            END FOR
+
+            # Print subjects from tuple
+            FOR EACH subject IN subjects DO
+                PRINT subject
+            END FOR
+
+            # Print ONE combined table: students as rows, subjects as columns
+            PRINT table header (Student | subject1 | subject2 | ...)
+            FOR EACH student, grades IN notes DO
+                PRINT student name + all grades as one row
+            END FOR
+            PRINT table footer
+
+        END IF
+
+        EXIT LOGIN LOOP
+
+    ELSE
+        PRINT "Invalid username or password. Please try again."
+    END IF
+
+UNTIL login is successful
+
+============================================================
+END OF PSEUDOCODE
+============================================================
