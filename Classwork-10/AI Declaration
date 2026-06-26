@@ -1,0 +1,21 @@
+========================================
+AI USE DECLARATION
+========================================
+Student name: Cristian Alejandro Cab Xool
+AI used: Claude (Anthropic)
+Date of use: 2026-06-26
+Purpose: Assistance designing the pseudocode (PPP.txt), generating the
+flowchart image (Flowchart.png), and writing/debugging the Python program
+(school_management_system.py) for the School Management System.
+Prompt used (summary): I asked for help building a school login system
+with three roles (student, professor, coordinator) using a users dictionary,
+a subjects tuple, and a notes dictionary. I requested the program to include
+a login loop with unlimited attempts, a student report card showing only
+passed subjects using sets, a professor menu with a loop to update multiple
+grades (with confirmation before saving), and a coordinator read-only report
+with a single combined grade table. I also requested the corresponding
+pseudocode (PPP) and flowchart matching the program logic and
+INPUT/PROCESS/OUTPUT structure.
+Note: I reviewed and tested the code myself (all three roles ran
+successfully) before submitting it.
+========================================
