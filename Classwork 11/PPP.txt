@@ -1,0 +1,115 @@
+============================================================
+PPP - Pseudocode
+Classwork #11 - The Mandelbrot Set
+============================================================
+
+# ---- PURPOSE ----
+# Generate Mandelbrot Set data by mapping a pixel grid
+# to the complex plane, iterating z = z^2 + c per pixel,
+# and writing the results to a CSV file.
+# Three modes select different viewing regions.
+# No functions used — all logic is inline.
+
+------------------------------------------------------------
+MODE SELECTION
+------------------------------------------------------------
+
+PRINT menu: Mode 1 = Full View, Mode 2 = Zoomed View, Mode 3 = Mini Brot
+
+# INPUT - Repeat until user picks 1, 2, or 3
+REPEAT
+    READ modo_input
+    IF modo_input IN (1, 2, 3) THEN
+        modo ← integer(modo_input)
+        EXIT LOOP
+    ELSE
+        PRINT "Invalid. Enter 1, 2, or 3."
+    END IF
+UNTIL valid mode chosen
+
+# PROCESS - Set config values based on chosen mode
+IF modo = 1 THEN
+    ancho=200, alto=200
+    real_min=-2.0, real_max=1.0
+    imag_min=-1.5, imag_max=1.5
+    max_iter=100
+ELSE IF modo = 2 THEN
+    ancho=200, alto=200
+    real_min=-0.8, real_max=-0.6
+    imag_min=0.0, imag_max=0.2
+    max_iter=200
+ELSE IF modo = 3 THEN
+    ancho=200, alto=200
+    real_min=-1.8, real_max=-1.6
+    imag_min=-0.1, imag_max=0.1
+    max_iter=300
+END IF
+
+# OUTPUT - Write config values to config.txt
+WRITE config lines to config.txt as "key=value"
+
+------------------------------------------------------------
+STEP 1 — Read the Config File
+------------------------------------------------------------
+
+# INPUT - Open config.txt and read key=value pairs into dictionary
+config ← {}
+archivo ← open("config.txt", read mode)
+
+FOR EACH linea IN archivo DO
+    clave, valor ← linea.strip().split("=")
+    config[clave] ← float(valor)
+END FOR
+
+CLOSE archivo
+
+------------------------------------------------------------
+STEP 2 — Map Pixels to Complex Numbers
+STEP 3 — Iterate and Count
+STEP 4 — Write to CSV
+------------------------------------------------------------
+
+# PROCESS - Extract dimensions and iteration limit from config
+ancho    ← integer(config["ancho"])
+alto     ← integer(config["alto"])
+max_iter ← integer(config["max_iter"])
+
+# OUTPUT - Open CSV output file and write header row
+salida ← open("mandelbrot.csv", write mode)
+WRITE "fila,columna,iteraciones" to salida
+
+# PROCESS - Loop over every pixel in the grid
+FOR fila FROM 0 TO alto - 1 DO
+    FOR columna FROM 0 TO ancho - 1 DO
+
+        # STEP 2 - Map (columna, fila) to a complex number c
+        #   columna → real axis
+        #   fila    → imaginary axis
+        real ← config["real_min"] + (columna / ancho) * (config["real_max"] - config["real_min"])
+        imag ← config["imag_min"] + (fila    / alto)  * (config["imag_max"] - config["imag_min"])
+        c    ← complex(real, imag)
+
+        # STEP 3 - Iterate: z_{n+1} = z_n^2 + c, starting at z = 0
+        z           ← 0 + 0j
+        iteraciones ← 0
+
+        WHILE abs(z) <= 2 AND iteraciones < max_iter DO
+            z           ← z * z + c
+            iteraciones ← iteraciones + 1
+        END WHILE
+
+        # STEP 4 - Write result to CSV
+        WRITE fila + "," + columna + "," + iteraciones to salida
+
+    END FOR
+END FOR
+
+# PROCESS - Close output file
+CLOSE salida
+
+# OUTPUT - Print completion message
+PRINT "Done. " + (alto * ancho) + " points written to mandelbrot.csv"
+
+============================================================
+END OF PSEUDOCODE
+============================================================
