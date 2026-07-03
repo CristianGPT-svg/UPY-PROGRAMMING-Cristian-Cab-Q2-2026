@@ -1,0 +1,95 @@
+PPP - Pseudocode
+Classwork #12 - The Mandelbrot Set (Image Visualization)
+============================================================
+ 
+# ---- PURPOSE ----
+# Read Mandelbrot iteration data from a CSV file,
+# map each pixel's iteration count to an HSV color,
+# and save the result as a PNG image.
+# No functions used — all logic is inline.
+ 
+------------------------------------------------------------
+STEP 1 — Read the Config File
+------------------------------------------------------------
+ 
+# INPUT - Open config.txt and load key=value pairs into dictionary
+config ← {}
+archivo ← open("config.txt", read mode)
+ 
+FOR EACH linea IN archivo DO
+    clave, valor ← linea.strip().split("=")
+    # Store as int if no decimal point, else as float
+    IF "." IN valor THEN
+        config[clave] ← float(valor)
+    ELSE
+        config[clave] ← int(valor)
+    END IF
+END FOR
+ 
+CLOSE archivo
+PRINT config
+ 
+------------------------------------------------------------
+STEP 2 — Read the CSV Data File
+------------------------------------------------------------
+ 
+# INPUT - Open clase.csv and read all lines into a list
+data  ← open("clase.csv", read mode)
+datos ← data.readlines()         # all rows as strings
+ 
+# PROCESS - Extract image dimensions from config
+alto  ← config["alto"]
+ancho ← config["ancho"]
+max_iter ← config["max_iter"]
+ 
+------------------------------------------------------------
+STEP 3 — Create an HSV Image
+------------------------------------------------------------
+ 
+# PROCESS - Create a blank image in HSV color mode, size ancho x alto
+img ← Image.new("HSV", (ancho, alto))
+ 
+# PROCESS - Remove the header row from the data list
+encabezados ← datos.pop(0)       # discards "fila,columna,iteraciones"
+ 
+------------------------------------------------------------
+STEP 4 — Color Each Pixel
+------------------------------------------------------------
+ 
+# PROCESS - Loop over every data row
+FOR EACH dato IN datos DO
+ 
+    # INPUT - Parse the three values from the CSV row
+    fila, columna, iteraciones ← map(int, dato.strip().split(","))
+ 
+    # PROCESS - Calculate brightness based on iteration count
+    #   If point is IN the set (iteraciones = max_iter) → brillo = 0 (black)
+    #   If point ESCAPED                                 → brillo = (iter/max_iter)*255
+    IF iteraciones = max_iter THEN
+        brillo ← 0
+    ELSE
+        brillo ← integer((iteraciones / max_iter) * 255)
+    END IF
+ 
+    # PROCESS - Set pixel color in HSV: (hue=brillo, saturation=255, value=255)
+    img.putpixel((columna, fila), (brillo, 255, 255))
+ 
+END FOR
+ 
+------------------------------------------------------------
+STEP 5 — Save the Image
+------------------------------------------------------------
+ 
+# PROCESS - Convert from HSV color space to RGB for saving
+img_rgb ← img.convert("RGB")
+ 
+# OUTPUT - Save as PNG file
+img_rgb.save("mandelbrot-clase.png")
+ 
+# OUTPUT - Confirmation message
+PRINT "DONE"
+ 
+============================================================
+END OF PSEUDOCODE
+============================================================
+ 
