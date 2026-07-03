@@ -1,0 +1,45 @@
+===========================================================
+AI USE DECLARATION
+Classwork #12 - The Mandelbrot Set
+============================================================
+ 
+Student Name : Cristian Alejandro Cab Xool
+Date         : 2026-07-03
+Course       : Programming
+Repository   : UPY-PROGRAMMING-Cristian-Cab-Q2-2026
+ 
+------------------------------------------------------------
+Declaration
+------------------------------------------------------------
+ 
+I, Cristian Alejandro Cab Xool, declare that I used an
+AI assistant (Claude by Anthropic) to support the
+completion of Classwork #11 - The Mandelbrot Set.
+ 
+The AI was used for the following purposes:
+ 
+  1. PPP.txt
+     The AI helped structure the pseudocode following class
+     conventions (← for assignment, # for comments,
+     plain English, no Python syntax). The logic is based
+     on the step-by-step guide provided by the professor
+     (Steps 1-4: config, pixel mapping, iteration, CSV).
+ 
+  2. Flowchart.png
+     The AI generated the flowchart covering the iteration
+     flow (z = z*z + c, abs(z) <= 2) and the decision
+     flow for the three modes (Full View, Zoomed, Mini Brot)
+     as well as the brightness decision per pixel.
+ 
+  3. mandelbrot_set_math.py
+     The AI helped complete the Python program following
+     the professor's four-step structure: reading config.txt,
+     mapping pixels to complex numbers, iterating with
+     abs(z), and writing fila/columna/iteraciones to CSV.
+ 
+All content was reviewed and understood by the student
+before submission.
+ 
+============================================================
+END OF DECLARATION
+============================================================
