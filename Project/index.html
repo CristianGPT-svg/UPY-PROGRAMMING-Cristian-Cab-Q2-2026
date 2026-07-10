@@ -1,0 +1,542 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Sam Beauty — Studio</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg:#1A1410;--gold:#C9A05A;--gold-light:#E8C882;--gold-pale:rgba(201,160,90,0.15);--gold-ultra:rgba(201,160,90,0.08);
+  --text:#F5ECD8;--muted:rgba(245,236,216,0.5);--border:rgba(201,160,90,0.15);--border-mid:rgba(201,160,90,0.28);
+  --rose-bg:rgba(212,160,160,0.12);--green:#7AC87A;--green-bg:rgba(122,200,122,0.12);
+  --amber:#E8B860;--amber-bg:rgba(232,184,96,0.12);--red:#E08080;--red-bg:rgba(224,128,128,0.12);
+  --shadow:0 4px 24px rgba(0,0,0,0.3);--r:14px;--rs:10px;
+}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden}
+.bg-img{position:fixed;inset:0;z-index:0;background-image:url('https://images.unsplash.com/photo-1560066984-138dadb4c035?w=1200&q=80&auto=format&fit=crop');background-size:cover;background-position:center;filter:brightness(0.18) saturate(0.6)}
+.bg-ov{position:fixed;inset:0;z-index:1;background:linear-gradient(180deg,rgba(18,12,6,0.75) 0%,rgba(18,12,6,0.4) 40%,rgba(18,12,6,0.88) 100%)}
+.app{position:relative;z-index:2;min-height:100vh}
+.splash{position:fixed;inset:0;z-index:1000;background:#100C08;display:flex;flex-direction:column;align-items:center;justify-content:center;transition:opacity 0.9s ease}
+.splash.hide{opacity:0;pointer-events:none}
+.splash-bg{position:absolute;inset:0;background-image:url('https://images.unsplash.com/photo-1560066984-138dadb4c035?w=1200&q=80&auto=format&fit=crop');background-size:cover;background-position:center;filter:brightness(0.1) saturate(0.4)}
+.splash-c{position:relative;z-index:1;text-align:center;padding:2rem}
+.splash-gem{font-size:28px;color:var(--gold);margin-bottom:20px;animation:gpulse 2s infinite}
+@keyframes gpulse{0%,100%{opacity:0.4;transform:scale(0.95)}50%{opacity:1;transform:scale(1.05)}}
+.splash-logo{font-family:'Cormorant Garamond',serif;color:var(--gold-light);font-size:44px;font-weight:300;letter-spacing:6px}
+.splash-line{width:80px;height:1px;background:linear-gradient(90deg,transparent,var(--gold),transparent);margin:24px auto}
+.splash-sub{font-size:10px;color:rgba(232,200,130,0.4);letter-spacing:5px;text-transform:uppercase}
+.splash-dots{display:flex;gap:8px;justify-content:center;margin-top:28px}
+.sdot{width:4px;height:4px;border-radius:50%;background:var(--gold);animation:sdot 1.4s infinite}
+.sdot:nth-child(2){animation-delay:.2s}.sdot:nth-child(3){animation-delay:.4s}
+@keyframes sdot{0%,80%,100%{opacity:0.3;transform:scale(0.8)}40%{opacity:1;transform:scale(1.3)}}
+.header{padding:1.25rem 1.5rem 1rem;display:flex;align-items:flex-start;justify-content:space-between;position:sticky;top:0;z-index:100;background:linear-gradient(180deg,rgba(12,8,4,0.96) 0%,rgba(12,8,4,0) 100%);backdrop-filter:blur(10px)}
+.brand-gem{font-size:10px;color:var(--gold);letter-spacing:2px;text-transform:uppercase;margin-bottom:4px;opacity:0.7}
+.brand-name{font-family:'Cormorant Garamond',serif;color:var(--gold-light);font-size:28px;font-weight:300;letter-spacing:2px;line-height:1}
+.brand-tag{font-size:10px;color:var(--muted);letter-spacing:2px;text-transform:uppercase;margin-top:4px}
+.hright{text-align:right;display:flex;flex-direction:column;align-items:flex-end;gap:6px}
+.hdate{font-size:12px;color:var(--gold-light);font-weight:500}
+.htime{font-size:22px;font-family:'Cormorant Garamond',serif;color:var(--text);font-weight:300;line-height:1}
+.rbtn{width:34px;height:34px;border-radius:50%;border:1px solid var(--border-mid);background:var(--gold-ultra);color:var(--gold-light);font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all 0.2s}
+.rbtn:hover{background:var(--gold-pale);border-color:var(--gold)}
+.rbtn.spin{animation:spin 0.8s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.nav{display:flex;overflow-x:auto;scrollbar-width:none;border-bottom:1px solid var(--border);background:rgba(12,8,4,0.65);backdrop-filter:blur(14px);position:sticky;top:0;z-index:99}
+.nav::-webkit-scrollbar{display:none}
+.nbtn{flex:1;min-width:75px;padding:.875rem 0;font-size:10px;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);background:none;border:none;border-bottom:1.5px solid transparent;cursor:pointer;font-family:'DM Sans',sans-serif;font-weight:500;transition:all .25s;white-space:nowrap}
+.nbtn.on{color:var(--gold-light);border-bottom-color:var(--gold)}
+.content{padding:1.25rem 1.25rem 6rem;max-width:680px;margin:0 auto}
+.sec{display:none;animation:fadeUp .35s ease}
+.sec.on{display:block}
+@keyframes fadeUp{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+.sh{display:flex;align-items:center;justify-content:space-between;margin-bottom:.875rem;margin-top:1.5rem}
+.sh-l{font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);font-weight:500}
+.sh-c{font-size:11px;color:var(--gold);background:var(--gold-pale);padding:2px 10px;border-radius:20px;border:1px solid var(--border)}
+.hero{border-radius:var(--r);overflow:hidden;position:relative;min-height:148px;display:flex;flex-direction:column;justify-content:flex-end;padding:1.5rem;border:1px solid var(--border-mid);margin-bottom:1.25rem;margin-top:.5rem}
+.hero-bg{position:absolute;inset:0;background-image:url('https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?w=800&q=80&auto=format&fit=crop');background-size:cover;background-position:center top;filter:brightness(0.3) saturate(0.7)}
+.hero-ov{position:absolute;inset:0;background:linear-gradient(180deg,rgba(18,12,6,0.15) 0%,rgba(18,12,6,0.88) 100%)}
+.hero-c{position:relative;z-index:1}
+.hero-tag{font-size:9px;color:var(--gold);letter-spacing:2px;text-transform:uppercase;margin-bottom:6px;opacity:.8}
+.hero-title{font-family:'Cormorant Garamond',serif;font-size:28px;color:var(--text);font-weight:300;line-height:1.25}
+.hero-sub{font-size:12px;color:var(--muted);margin-top:6px;line-height:1.5}
+.alert{border-radius:var(--rs);padding:.875rem 1.25rem;margin-bottom:1rem;display:flex;align-items:flex-start;gap:12px;border:1px solid}
+.alert-bd{background:var(--rose-bg);border-color:rgba(212,160,160,0.25)}
+.alert-free{background:var(--gold-ultra);border-color:rgba(201,160,90,0.2)}
+.alert-icon{font-size:20px;flex-shrink:0;margin-top:1px}
+.alert-title{font-size:13px;font-weight:500;color:var(--text)}
+.alert-sub{font-size:11px;color:var(--muted);margin-top:3px;line-height:1.5}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:1.25rem}
+.stat{background:rgba(255,248,235,0.05);border-radius:var(--rs);padding:1rem .875rem;border:1px solid var(--border);backdrop-filter:blur(8px);text-align:center}
+.stat-l{font-size:9px;color:var(--muted);letter-spacing:1.5px;text-transform:uppercase}
+.stat-v{font-family:'Cormorant Garamond',serif;font-size:22px;color:var(--gold-light);font-weight:400;margin-top:6px;line-height:1}
+.stat-s{font-size:10px;color:var(--muted);margin-top:4px}
+.ccard{background:rgba(255,248,235,0.05);border-radius:var(--rs);padding:1rem 1.25rem;border:1px solid var(--border);backdrop-filter:blur(8px);display:flex;align-items:center;gap:14px;margin-bottom:8px;transition:all .2s}
+.ccard:hover{background:rgba(255,248,235,0.08);border-color:var(--border-mid)}
+.ccard.primera{border-color:rgba(201,160,90,0.4)}
+.ctime{text-align:center;min-width:44px;flex-shrink:0}
+.chour{font-size:20px;font-weight:400;color:var(--gold-light);line-height:1;font-family:'Cormorant Garamond',serif}
+.camp{font-size:9px;color:var(--muted);letter-spacing:1px;text-transform:uppercase;margin-top:2px}
+.cline{width:1px;height:52px;background:var(--border-mid);flex-shrink:0}
+.cbody{flex:1;min-width:0}
+.cname{font-size:14px;font-weight:500;color:var(--text)}
+.csvc{font-size:11px;color:var(--muted);margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.cnota{font-size:11px;color:var(--gold);margin-top:4px;font-style:italic;opacity:.8}
+.cbadges{display:flex;gap:4px;margin-top:6px;flex-wrap:wrap}
+.cend{text-align:right;flex-shrink:0}
+.cprice{font-family:'Cormorant Garamond',serif;font-size:20px;color:var(--gold-light);font-weight:400;line-height:1}
+.walink{display:block;margin-top:6px;font-size:10px;color:#5CDD8B;text-decoration:none;opacity:.85}
+.badge{font-size:10px;padding:2px 8px;border-radius:20px;font-weight:500;display:inline-block}
+.b-ok{background:var(--green-bg);color:var(--green);border:1px solid rgba(122,200,122,0.2)}
+.b-pend{background:var(--amber-bg);color:var(--amber);border:1px solid rgba(232,184,96,0.2)}
+.b-cancel{background:var(--red-bg);color:var(--red);border:1px solid rgba(224,128,128,0.2)}
+.b-primera{background:var(--gold-pale);color:var(--gold-light);border:1px solid var(--border)}
+.tbar{background:linear-gradient(135deg,rgba(201,160,90,0.16) 0%,rgba(201,160,90,0.05) 100%);border:1px solid var(--border-mid);border-radius:var(--r);padding:1.25rem 1.5rem;display:flex;justify-content:space-between;align-items:center;margin-top:1.25rem;backdrop-filter:blur(12px)}
+.tbar-l .tl{font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--muted)}
+.tbar-l .tc{font-size:12px;color:var(--gold);margin-top:4px}
+.tamount{font-family:'Cormorant Garamond',serif;font-size:34px;color:var(--gold-light);font-weight:300}
+.payrow{display:flex;gap:6px;flex-wrap:wrap;margin-top:1rem}
+.paypill{font-size:11px;padding:5px 12px;border-radius:20px;border:1px solid var(--border);color:var(--muted);background:var(--gold-ultra)}
+.swrap{position:relative;margin-bottom:1rem}
+.sinput{width:100%;padding:.75rem 1rem .75rem 2.75rem;border:1px solid var(--border);border-radius:var(--rs);background:rgba(255,248,235,0.05);font-family:'DM Sans',sans-serif;font-size:13px;color:var(--text);outline:none;transition:border-color .2s;backdrop-filter:blur(8px)}
+.sinput::placeholder{color:var(--muted)}
+.sinput:focus{border-color:var(--gold)}
+.sicon{position:absolute;left:12px;top:50%;transform:translateY(-50%);font-size:14px;color:var(--muted);pointer-events:none}
+.clcard{background:rgba(255,248,235,0.04);border-radius:var(--rs);border:1px solid var(--border);backdrop-filter:blur(8px);margin-bottom:8px;overflow:hidden}
+.clhead{display:flex;align-items:center;gap:12px;padding:1rem 1.25rem;cursor:pointer}
+.avatar{width:42px;height:42px;border-radius:50%;background:var(--gold-pale);border:1px solid var(--border-mid);display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:400;color:var(--gold-light);flex-shrink:0;font-family:'Cormorant Garamond',serif}
+.clinfo{flex:1;min-width:0}
+.clname{font-size:14px;font-weight:500;color:var(--text)}
+.clmeta{font-size:11px;color:var(--muted);margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.chev{color:var(--muted);font-size:16px;transition:transform .25s;flex-shrink:0}
+.chev.open{transform:rotate(90deg)}
+.cldet{display:none;border-top:1px solid var(--border);padding:1rem 1.25rem}
+.cldet.open{display:block}
+.dgrid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.di{background:rgba(255,248,235,0.04);border-radius:var(--rs);padding:.75rem;border:1px solid var(--border)}
+.di.full{grid-column:1/-1}
+.dk{font-size:9px;color:var(--muted);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:4px}
+.dv{font-size:13px;color:var(--text);line-height:1.5}
+.htags{display:flex;flex-wrap:wrap;gap:5px;margin-top:4px}
+.htag{font-size:11px;padding:2px 8px;border-radius:12px;background:var(--gold-pale);color:var(--gold-light);border:1px solid var(--border)}
+.wabtn{display:inline-flex;align-items:center;gap:6px;background:rgba(37,211,102,0.15);color:#5CDD8B;border:1px solid rgba(37,211,102,0.2);padding:7px 16px;border-radius:20px;font-size:12px;font-family:'DM Sans',sans-serif;cursor:pointer;margin-top:12px;text-decoration:none}
+.inghero{border-radius:var(--r);padding:1.75rem 1.5rem;margin-bottom:1.25rem;position:relative;overflow:hidden;border:1px solid var(--border-mid)}
+.inghero-bg{position:absolute;inset:0;background-image:url('https://images.unsplash.com/photo-1487412947147-5cebf100ffc2?w=800&q=80&auto=format&fit=crop');background-size:cover;background-position:center;filter:brightness(0.12) saturate(0.5)}
+.inghero-c{position:relative;z-index:1}
+.ing-lbl{font-size:10px;color:rgba(232,200,130,0.6);letter-spacing:2px;text-transform:uppercase;margin-bottom:8px}
+.ing-val{font-family:'Cormorant Garamond',serif;font-size:48px;color:var(--gold-light);font-weight:300;line-height:1}
+.ing-sub{font-size:12px;color:var(--muted);margin-top:8px}
+.inggrid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:1.25rem}
+.ingcard{background:rgba(255,248,235,0.05);border-radius:var(--rs);padding:1rem 1.25rem;border:1px solid var(--border);backdrop-filter:blur(8px)}
+.ingcard.full{grid-column:1/-1}
+.ing-cl{font-size:9px;color:var(--muted);letter-spacing:1.5px;text-transform:uppercase}
+.ing-cv{font-family:'Cormorant Garamond',serif;font-size:28px;color:var(--gold-light);font-weight:300;margin-top:6px}
+.bitem{background:rgba(255,248,235,0.04);border-radius:var(--rs);border:1px solid var(--border);padding:.875rem 1.25rem;margin-bottom:6px}
+.bhead{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
+.bname{font-size:12px;color:var(--text);max-width:200px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.bval{font-family:'Cormorant Garamond',serif;font-size:18px;color:var(--gold-light)}
+.btrack{height:3px;background:rgba(255,255,255,0.08);border-radius:2px}
+.bfill{height:3px;background:linear-gradient(90deg,var(--gold),var(--gold-light));border-radius:2px;transition:width .8s ease}
+.hitem{background:rgba(255,248,235,0.04);border-radius:var(--rs);border:1px solid var(--border);padding:.875rem 1.25rem;display:flex;align-items:center;gap:12px;margin-bottom:6px}
+.hdate{min-width:68px}
+.hdate-d{font-size:12px;font-weight:500;color:var(--gold-light)}
+.hdate-t{font-size:10px;color:var(--muted);margin-top:1px}
+.hbody{flex:1;min-width:0}
+.hname{font-size:13px;font-weight:500;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.hsvc{font-size:11px;color:var(--muted);margin-top:1px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.hend{text-align:right;flex-shrink:0}
+.hprice{font-family:'Cormorant Garamond',serif;font-size:17px;color:var(--gold-light)}
+.loading{text-align:center;padding:3rem 1rem}
+.ldots{display:flex;gap:6px;justify-content:center;margin-bottom:12px}
+.ldot{width:5px;height:5px;border-radius:50%;background:var(--gold);animation:ldot 1.2s infinite}
+.ldot:nth-child(2){animation-delay:.15s}.ldot:nth-child(3){animation-delay:.3s}
+@keyframes ldot{0%,80%,100%{transform:scale(0.6);opacity:0.3}40%{transform:scale(1.1);opacity:1}}
+.loading p{font-size:12px;color:var(--muted)}
+.empty{text-align:center;padding:3rem 1rem}
+.empty-icon{font-size:36px;opacity:.15;margin-bottom:12px}
+.empty p{font-size:13px;color:var(--muted)}
+.errbox{background:var(--red-bg);border:1px solid rgba(224,128,128,0.2);border-radius:var(--rs);padding:1rem 1.25rem;font-size:12px;color:var(--red);margin-bottom:1rem;line-height:1.6}
+.btmsafe{height:40px}
+</style>
+</head>
+<body>
+<div class="bg-img"></div><div class="bg-ov"></div>
+<div class="splash" id="splash">
+  <div class="splash-bg"></div>
+  <div class="splash-c">
+    <div class="splash-gem">✦</div>
+    <div class="splash-logo">Sam Beauty</div>
+    <div class="splash-line"></div>
+    <div class="splash-sub">Studio Dashboard</div>
+    <div class="splash-dots"><div class="sdot"></div><div class="sdot"></div><div class="sdot"></div></div>
+  </div>
+</div>
+<div class="app">
+<div class="header">
+  <div>
+    <div class="brand-gem">✦ Centro de Estética Integral</div>
+    <div class="brand-name">Sam Beauty</div>
+    <div class="brand-tag">Mérida, Yucatán</div>
+  </div>
+  <div class="hright">
+    <div class="hdate" id="hDate"></div>
+    <div class="htime" id="hTime"></div>
+    <button class="rbtn" id="rbtn" onclick="loadAll()">↻</button>
+  </div>
+</div>
+<nav class="nav">
+  <button class="nbtn on" onclick="showTab('hoy',0)">Hoy</button>
+  <button class="nbtn" onclick="showTab('clientes',1)">Clientes</button>
+  <button class="nbtn" onclick="showTab('ingresos',2)">Ingresos</button>
+  <button class="nbtn" onclick="showTab('historial',3)">Historial</button>
+</nav>
+<div class="content">
+  <div id="tab-hoy" class="sec on">
+    <div id="bdAlert"></div><div id="freeAlert"></div>
+    <div class="hero"><div class="hero-bg"></div><div class="hero-ov"></div>
+      <div class="hero-c">
+        <div class="hero-tag">✦ Resumen del día</div>
+        <div class="hero-title" id="heroTitle">Cargando...</div>
+        <div class="hero-sub" id="heroSub"></div>
+      </div>
+    </div>
+    <div class="stats">
+      <div class="stat"><div class="stat-l">Citas hoy</div><div class="stat-v" id="sCitas">—</div><div class="stat-s">programadas</div></div>
+      <div class="stat"><div class="stat-l">Ingresos hoy</div><div class="stat-v" id="sHoy">—</div><div class="stat-s">estimado</div></div>
+      <div class="stat"><div class="stat-l">Esta semana</div><div class="stat-v" id="sSem">—</div><div class="stat-s">acumulado</div></div>
+    </div>
+    <div class="sh"><div class="sh-l">Agenda del día</div><div class="sh-c" id="cHoy">—</div></div>
+    <div id="citasHoy"><div class="loading"><div class="ldots"><div class="ldot"></div><div class="ldot"></div><div class="ldot"></div></div><p>Cargando citas...</p></div></div>
+    <div id="tbarWrap"></div>
+    <div class="payrow"><span class="paypill">💵 Efectivo</span><span class="paypill">💳 Tarjeta</span><span class="paypill">🔄 Transferencia</span></div>
+  </div>
+  <div id="tab-clientes" class="sec">
+    <div class="sh" style="margin-top:.5rem"><div class="sh-l">Mis clientas</div><div class="sh-c" id="cClientes">—</div></div>
+    <div class="swrap"><span class="sicon">🔍</span><input class="sinput" id="sinput" placeholder="Buscar por nombre..." oninput="filterCl(this.value)"></div>
+    <div id="clList"><div class="loading"><div class="ldots"><div class="ldot"></div><div class="ldot"></div><div class="ldot"></div></div><p>Cargando clientes...</p></div></div>
+  </div>
+  <div id="tab-ingresos" class="sec">
+    <div class="inghero" style="margin-top:.5rem"><div class="inghero-bg"></div>
+      <div class="inghero-c">
+        <div class="ing-lbl">Ingresos del mes</div>
+        <div class="ing-val" id="ingMes">—</div>
+        <div class="ing-sub" id="ingMesSub">calculando...</div>
+      </div>
+    </div>
+    <div class="inggrid">
+      <div class="ingcard"><div class="ing-cl">Hoy</div><div class="ing-cv" id="ingHoy">—</div></div>
+      <div class="ingcard"><div class="ing-cl">Esta semana</div><div class="ing-cv" id="ingSem">—</div></div>
+      <div class="ingcard full"><div class="ing-cl">Citas este mes</div><div class="ing-cv" id="ingCitas">—</div></div>
+    </div>
+    <div class="sh"><div class="sh-l">Por servicio este mes</div></div>
+    <div id="ingSvcs"></div>
+  </div>
+  <div id="tab-historial" class="sec">
+    <div class="sh" style="margin-top:.5rem"><div class="sh-l">Todas las citas</div><div class="sh-c" id="cHist">—</div></div>
+    <div id="histList"><div class="loading"><div class="ldots"><div class="ldot"></div><div class="ldot"></div><div class="ldot"></div></div><p>Cargando historial...</p></div></div>
+  </div>
+</div>
+<div class="btmsafe"></div>
+</div>
+
+<script>
+const API='https://script.google.com/macros/s/AKfycbz-L9nK6VaNvZdzmnz9OGGo66R7gcbb42-Unf2VCJLOzWPzL3tjkFv3oT9FPZnxiapHFw/exec';
+let CITAS=[],CLIENTES=[],pending=0;
+
+// JSONP
+function jsonp(url,cb){
+  const n='cb_'+Date.now()+'_'+Math.round(Math.random()*1e6);
+  window[n]=function(d){delete window[n];const s=document.getElementById(n);if(s)s.remove();cb(null,d);};
+  const s=document.createElement('script');s.id=n;
+  s.onerror=function(){delete window[n];s.remove();cb(new Error('err'));};
+  s.src=url+'&callback='+n;
+  document.head.appendChild(s);
+}
+
+// DATETIME
+function updateDT(){
+  const n=new Date();
+  const dias=['domingo','lunes','martes','miércoles','jueves','viernes','sábado'];
+  const meses=['enero','febrero','marzo','abril','mayo','junio','julio','agosto','septiembre','octubre','noviembre','diciembre'];
+  document.getElementById('hDate').textContent=dias[n.getDay()]+' '+n.getDate()+' '+meses[n.getMonth()];
+  document.getElementById('hTime').textContent=n.toLocaleTimeString('es-MX',{hour:'2-digit',minute:'2-digit'});
+}
+updateDT();setInterval(updateDT,30000);
+
+// NAV
+function showTab(id,idx){
+  document.querySelectorAll('.sec').forEach(s=>s.classList.remove('on'));
+  document.querySelectorAll('.nbtn').forEach(b=>b.classList.remove('on'));
+  document.getElementById('tab-'+id).classList.add('on');
+  document.querySelectorAll('.nbtn')[idx].classList.add('on');
+}
+
+// PARSE FECHA — maneja el formato largo de Google Sheets
+function pFecha(f){
+  if(!f||f===''||f==='undefined') return null;
+  // Si viene como string largo tipo "Mon Jun 08 2026 00:00:00 GMT..."
+  const d=new Date(f);
+  if(!isNaN(d)) return d;
+  // Si viene como dd/mm/yyyy
+  if(typeof f==='string'){
+    const p=f.split('/');
+    if(p.length===3){const d2=new Date(+p[2],+p[1]-1,+p[0]);return isNaN(d2)?null:d2;}
+  }
+  return null;
+}
+
+// PARSE HORA — maneja el formato largo de Google Sheets
+function pHora(h){
+  if(!h||h===''||h==='undefined') return {h:'—',m:'00',ap:''};
+  // Si viene como "Sat Dec 30 1899 15:00:00 GMT..." extraemos hora y minuto
+  const d=new Date(h);
+  if(!isNaN(d)){
+    let hrs=d.getHours(), mins=d.getMinutes();
+    const ap=hrs>=12?'pm':'am';
+    const h12=hrs%12||12;
+    return {h:String(h12),m:String(mins).padStart(2,'0'),ap};
+  }
+  // Si viene como "3:00 p.m." o "15:00"
+  const s=String(h).replace(/a\.\s*m\./gi,'am').replace(/p\.\s*m\./gi,'pm').replace(/\s/g,'');
+  const m=s.match(/(\d+):(\d+)(am|pm)?/i);
+  if(m) return {h:m[1],m:m[2],ap:(m[3]||'').toLowerCase()};
+  return {h:String(h),m:'',ap:''};
+}
+
+// FORMAT FECHA para mostrar
+function fFecha(f){
+  const d=pFecha(f);
+  if(!d) return '—';
+  return d.toLocaleDateString('es-MX',{day:'numeric',month:'short',year:'numeric'});
+}
+
+function isToday(f){
+  const d=pFecha(f),t=new Date();
+  return d&&d.getDate()===t.getDate()&&d.getMonth()===t.getMonth()&&d.getFullYear()===t.getFullYear();
+}
+function isWeek(f){
+  const d=pFecha(f);
+  if(!d) return false;
+  const t=new Date(),sw=new Date(t);
+  sw.setDate(t.getDate()-((t.getDay()+6)%7));sw.setHours(0,0,0,0);
+  const ew=new Date(sw);ew.setDate(sw.getDate()+6);ew.setHours(23,59,59,999);
+  return d>=sw&&d<=ew;
+}
+function isMonth(f){
+  const d=pFecha(f),t=new Date();
+  return d&&d.getMonth()===t.getMonth()&&d.getFullYear()===t.getFullYear();
+}
+function bdSoon(c){
+  if(!c||c===''||c==='undefined') return false;
+  const hoy=new Date(),p=c.toString().split('/');
+  if(p.length<2) return false;
+  const cd=new Date(hoy.getFullYear(),+p[1]-1,+p[0]);
+  return (cd-hoy)/86400000>=0&&(cd-hoy)/86400000<=7;
+}
+
+function fp(p){
+  if(!p||p===''||p==='undefined') return '—';
+  if(p==='A valorar') return 'A valorar';
+  const n=parseFloat(p);if(isNaN(n)) return String(p);
+  return '$'+Math.round(n).toLocaleString('es-MX');
+}
+function fn(p){const n=parseFloat(p);return isNaN(n)?0:n;}
+function badge(e){
+  const s=(e||'').toLowerCase();
+  if(s.includes('confirm')) return `<span class="badge b-ok">${e}</span>`;
+  if(s.includes('cancel')) return `<span class="badge b-cancel">${e}</span>`;
+  return `<span class="badge b-pend">${e||'Pendiente'}</span>`;
+}
+function initials(n){return(n||'').split(' ').map(w=>w[0]||'').join('').slice(0,2).toUpperCase();}
+function mesNombre(){return['enero','febrero','marzo','abril','mayo','junio','julio','agosto','septiembre','octubre','noviembre','diciembre'][new Date().getMonth()];}
+
+// LOAD
+function loadAll(){
+  document.getElementById('rbtn').classList.add('spin');
+  pending=2;
+  loadCitas();loadClientes();
+}
+function done(){pending--;if(pending<=0)document.getElementById('rbtn').classList.remove('spin');}
+
+function loadCitas(){
+  jsonp(API+'?action=getCitas&t='+Date.now(),function(err,json){
+    if(err||!json){
+      document.getElementById('citasHoy').innerHTML='<div class="errbox">⚠️ No se pudo conectar. Intenta de nuevo.</div>';
+      document.getElementById('heroTitle').textContent='Sin conexión';
+      done();return;
+    }
+    CITAS=(json.data||[]).filter(c=>c.nombre&&c.nombre.trim()&&c.nombre!=='undefined');
+    renderHoy();renderIngresos();renderHistorial();done();
+  });
+}
+
+function loadClientes(){
+  jsonp(API+'?action=getClientes&t='+Date.now(),function(err,json){
+    if(err||!json){document.getElementById('clList').innerHTML='<div class="errbox">⚠️ Error cargando clientes.</div>';done();return;}
+    CLIENTES=(json.data||[]).filter(c=>c.nombre&&c.nombre.trim()&&c.nombre!=='undefined');
+    renderClientes('');checkBd();done();
+  });
+}
+
+// HOY
+function renderHoy(){
+  const hoy=CITAS.filter(c=>isToday(c.fecha)).sort((a,b)=>{
+    const ha=pHora(a.hora),hb=pHora(b.hora);
+    const ta=parseInt(ha.h)+(ha.ap==='pm'&&parseInt(ha.h)!==12?12:0);
+    const tb=parseInt(hb.h)+(hb.ap==='pm'&&parseInt(hb.h)!==12?12:0);
+    return ta-tb;
+  });
+
+  let totalHoy=0,totalSem=0;
+  CITAS.forEach(c=>{
+    const p=fn(c.precio);
+    if(isToday(c.fecha)) totalHoy+=p;
+    if(isWeek(c.fecha)) totalSem+=p;
+  });
+
+  document.getElementById('sCitas').textContent=hoy.length;
+  document.getElementById('sHoy').textContent='$'+Math.round(totalHoy).toLocaleString('es-MX');
+  document.getElementById('sSem').textContent='$'+Math.round(totalSem).toLocaleString('es-MX');
+  document.getElementById('cHoy').textContent=hoy.length+' cita'+(hoy.length!==1?'s':'');
+
+  const dias=['domingo','lunes','martes','miércoles','jueves','viernes','sábado'];
+  const diaHoy=dias[new Date().getDay()];
+
+  if(hoy.length===0){
+    document.getElementById('heroTitle').textContent='Sin citas hoy';
+    document.getElementById('heroSub').textContent='Tu agenda está libre — disfruta tu día ✨';
+    document.getElementById('freeAlert').innerHTML=`<div class="alert alert-free"><div class="alert-icon">🌸</div><div><div class="alert-title">No tienes citas programadas para hoy</div><div class="alert-sub">Un buen momento para descansar o preparar tus materiales.</div></div></div>`;
+    document.getElementById('citasHoy').innerHTML='<div class="empty"><div class="empty-icon">📅</div><p>No hay citas para hoy</p></div>';
+    document.getElementById('tbarWrap').innerHTML='';
+    return;
+  }
+
+  document.getElementById('freeAlert').innerHTML='';
+  const pr=hoy[0];const hrP=pHora(pr.hora);
+  document.getElementById('heroTitle').textContent=hoy.length+' cita'+(hoy.length!==1?'s':'')+' este '+diaHoy;
+  document.getElementById('heroSub').textContent='Próxima: '+pr.nombre+' · '+hrP.h+':'+hrP.m+' '+hrP.ap+(pr.servicio?' — '+pr.servicio.substring(0,30):'');
+
+  document.getElementById('citasHoy').innerHTML=hoy.map(c=>{
+    const hr=pHora(c.hora);
+    const primera=c.primeraVez==='Sí'?'<span class="badge b-primera">✨ Primera vez</span>':'';
+    const nota=c.notas&&c.notas!=='undefined'&&c.notas!==''?`<div class="cnota">📝 ${c.notas}</div>`:'';
+    const wa=c.whatsapp&&c.whatsapp!=='undefined'&&c.whatsapp!==''?`<a href="https://wa.me/${c.whatsapp.replace(/\D/g,'')}" target="_blank" class="walink">💬 WhatsApp</a>`:'';
+    return `<div class="ccard${c.primeraVez==='Sí'?' primera':''}">
+      <div class="ctime"><div class="chour">${hr.h}:${hr.m}</div><div class="camp">${hr.ap}</div></div>
+      <div class="cline"></div>
+      <div class="cbody">
+        <div class="cname">${c.nombre}</div>
+        <div class="csvc">${c.servicio&&c.servicio!=='undefined'?c.servicio:'—'}</div>
+        <div class="cbadges">${badge(c.estatus)} ${primera}</div>
+        ${nota}
+      </div>
+      <div class="cend"><div class="cprice">${fp(c.precio)}</div>${wa}</div>
+    </div>`;
+  }).join('');
+
+  const conf=hoy.filter(c=>c.estatus&&c.estatus.toLowerCase().includes('confirm')).length;
+  document.getElementById('tbarWrap').innerHTML=`<div class="tbar">
+    <div class="tbar-l"><div class="tl">Total estimado del día</div><div class="tc">${hoy.length} cita${hoy.length!==1?'s':''} · ${conf} confirmada${conf!==1?'s':''}</div></div>
+    <div class="tamount">$${Math.round(totalHoy).toLocaleString('es-MX')}</div>
+  </div>`;
+}
+
+// CLIENTES
+function renderClientes(filtro){
+  const lista=filtro?CLIENTES.filter(c=>c.nombre.toLowerCase().includes(filtro.toLowerCase())):CLIENTES;
+  document.getElementById('cClientes').textContent=CLIENTES.length+' clientas';
+  const el=document.getElementById('clList');
+  if(!lista.length){
+    el.innerHTML=filtro?'<div class="empty"><div class="empty-icon">🔍</div><p>No se encontraron clientas</p></div>':'<div class="empty"><div class="empty-icon">👤</div><p>Aún no hay clientas registradas</p></div>';
+    return;
+  }
+  el.innerHTML=lista.map((c,i)=>{
+    const cnt=CITAS.filter(ci=>ci.nombre===c.nombre).length;
+    const total=CITAS.filter(ci=>ci.nombre===c.nombre).reduce((s,ci)=>s+fn(ci.precio),0);
+    const bd=bdSoon(c.cumpleanos)?'🎂 ':'';
+    const hx=c.historialMedico&&c.historialMedico!=='undefined'&&c.historialMedico!==''?c.historialMedico.split(',').map(h=>`<span class="htag">${h.trim()}</span>`).join(''):'<span style="color:var(--muted);font-size:12px">Sin registros</span>';
+    const wa=c.whatsapp&&c.whatsapp!=='undefined'&&c.whatsapp!==''?`<a href="https://wa.me/${c.whatsapp.replace(/\D/g,'')}" target="_blank" class="wabtn">💬 Enviar WhatsApp</a>`:'';
+    const ult=c.ultimaCita&&c.ultimaCita!=='undefined'?fFecha(c.ultimaCita):'—';
+    return `<div class="clcard">
+      <div class="clhead" onclick="togCl(${i})">
+        <div class="avatar">${initials(c.nombre)}</div>
+        <div class="clinfo"><div class="clname">${bd}${c.nombre}</div><div class="clmeta">Última: ${ult} · ${c.ultimoServicio&&c.ultimoServicio!=='undefined'?c.ultimoServicio:'—'}</div></div>
+        <div class="chev" id="chev-${i}">›</div>
+      </div>
+      <div class="cldet" id="cd-${i}">
+        <div class="dgrid">
+          <div class="di"><div class="dk">WhatsApp</div><div class="dv">${c.whatsapp&&c.whatsapp!=='undefined'?c.whatsapp:'—'}</div></div>
+          <div class="di"><div class="dk">Cumpleaños</div><div class="dv">${c.cumpleanos&&c.cumpleanos!=='undefined'?c.cumpleanos:'—'}</div></div>
+          <div class="di"><div class="dk">Total citas</div><div class="dv">${cnt}</div></div>
+          <div class="di"><div class="dk">Total gastado</div><div class="dv">$${Math.round(total).toLocaleString('es-MX')}</div></div>
+          <div class="di full"><div class="dk">Último servicio</div><div class="dv">${c.ultimoServicio&&c.ultimoServicio!=='undefined'?c.ultimoServicio:'—'}</div></div>
+          <div class="di full"><div class="dk">Historial médico / alergias</div><div class="dv"><div class="htags">${hx}</div></div></div>
+          <div class="di full"><div class="dk">Notas</div><div class="dv">${c.notas&&c.notas!=='undefined'&&c.notas!==''?c.notas:'Sin notas'}</div></div>
+        </div>${wa}
+      </div>
+    </div>`;
+  }).join('');
+}
+function togCl(i){const d=document.getElementById('cd-'+i),ch=document.getElementById('chev-'+i);if(!d)return;const o=d.classList.toggle('open');if(ch)ch.classList.toggle('open',o);}
+function filterCl(v){renderClientes(v);}
+
+// INGRESOS
+function renderIngresos(){
+  let dia=0,sem=0,mes=0,cnt=0;const smap={};
+  CITAS.forEach(c=>{
+    const p=fn(c.precio);
+    if(isToday(c.fecha)) dia+=p;
+    if(isWeek(c.fecha)) sem+=p;
+    if(isMonth(c.fecha)){
+      mes+=p;cnt++;
+      const sv=(c.servicio||'Otro').split('·')[0].trim().split('—')[0].trim().substring(0,35);
+      if(sv&&sv!=='undefined') smap[sv]=(smap[sv]||0)+p;
+    }
+  });
+  document.getElementById('ingMes').textContent='$'+Math.round(mes).toLocaleString('es-MX');
+  document.getElementById('ingMesSub').textContent=mesNombre()+' '+new Date().getFullYear()+' · '+cnt+' cita'+(cnt!==1?'s':'');
+  document.getElementById('ingHoy').textContent='$'+Math.round(dia).toLocaleString('es-MX');
+  document.getElementById('ingSem').textContent='$'+Math.round(sem).toLocaleString('es-MX');
+  document.getElementById('ingCitas').textContent=cnt+' cita'+(cnt!==1?'s':'');
+  const svcs=Object.entries(smap).sort((a,b)=>b[1]-a[1]);
+  const el=document.getElementById('ingSvcs');
+  if(!svcs.length){el.innerHTML='<div class="empty"><div class="empty-icon">📊</div><p>Sin datos este mes</p></div>';return;}
+  const max=svcs[0][1];
+  el.innerHTML=svcs.map(([sv,tot])=>`<div class="bitem"><div class="bhead"><div class="bname">${sv}</div><div class="bval">$${Math.round(tot).toLocaleString('es-MX')}</div></div><div class="btrack"><div class="bfill" style="width:${Math.round(tot/max*100)}%"></div></div></div>`).join('');
+}
+
+// HISTORIAL
+function renderHistorial(){
+  const sorted=[...CITAS].sort((a,b)=>{const fa=pFecha(a.fecha),fb=pFecha(b.fecha);if(!fa||!fb)return 0;return fb-fa;});
+  document.getElementById('cHist').textContent=sorted.length+' citas';
+  const el=document.getElementById('histList');
+  if(!sorted.length){el.innerHTML='<div class="empty"><div class="empty-icon">📋</div><p>Sin citas registradas</p></div>';return;}
+  el.innerHTML=sorted.map(c=>{
+    const hr=pHora(c.hora);
+    return `<div class="hitem">
+      <div class="hdate"><div class="hdate-d">${fFecha(c.fecha)}</div><div class="hdate-t">${hr.h}:${hr.m} ${hr.ap}</div></div>
+      <div style="width:1px;height:36px;background:var(--border);flex-shrink:0"></div>
+      <div class="hbody"><div class="hname">${c.nombre||'—'}</div><div class="hsvc">${c.servicio&&c.servicio!=='undefined'?c.servicio:'—'}</div></div>
+      <div class="hend"><div class="hprice">${fp(c.precio)}</div><div style="margin-top:3px">${badge(c.estatus)}</div></div>
+    </div>`;
+  }).join('');
+}
+
+// BIRTHDAYS
+function checkBd(){
+  const prox=CLIENTES.filter(c=>bdSoon(c.cumpleanos));
+  const el=document.getElementById('bdAlert');
+  if(prox.length){
+    const n=prox.map(c=>c.nombre.split(' ')[0]).join(', ');
+    el.innerHTML=`<div class="alert alert-bd"><div class="alert-icon">🎂</div><div><div class="alert-title">Cumpleaños próximos: ${n}</div><div class="alert-sub">En los próximos 7 días — ¡envíales un mensaje especial!</div></div></div>`;
+  } else el.innerHTML='';
+}
+
+window.addEventListener('load',()=>{
+  loadAll();
+  setTimeout(()=>document.getElementById('splash').classList.add('hide'),3500);
+});
+</script>
+</body>
+</html>
