@@ -1,0 +1,27 @@
+2026-07-10 17:59:48 — [INFO] ========================================================
+2026-07-10 17:59:48 — [INFO] Sam Beauty Dashboard — pipeline started
+2026-07-10 17:59:48 — [INFO] Run date: 2026-07-10 17:59:48
+2026-07-10 17:59:48 — [INFO] ========================================================
+2026-07-10 17:59:48 — [INFO] Loading appointments — 10 records found
+2026-07-10 17:59:48 — [WARNING] Row 4 (Venus Noh, 10/07/2026): payment method missing
+2026-07-10 17:59:48 — [WARNING] Row 8 (Keyra Pool): price not set for 'Full Brows' — recorded as 0
+2026-07-10 17:59:48 — [WARNING] Row 8 (Keyra Pool, 12/07/2026): payment method missing
+2026-07-10 17:59:48 — [INFO] Appointments loaded — 10 valid, 0 skipped
+2026-07-10 17:59:48 — [INFO] Loading clients — 8 records found
+2026-07-10 17:59:48 — [INFO] Client 'Valeria Loeza': medical/allergy record noted — 'Alergia al latex'
+2026-07-10 17:59:48 — [INFO] Clients loaded — 8 valid records
+2026-07-10 17:59:48 — [INFO] Calculating revenue totals
+2026-07-10 17:59:48 — [INFO] Revenue — Today: $1825.00 | Week: $3700.00 | Month: $3700.00
+2026-07-10 17:59:48 — [INFO] Payment methods — Efectivo: $1675.00 | Tarjeta: $1325.00 | Transferencia: $250.00 | Sin método: $450.00
+2026-07-10 17:59:48 — [WARNING] $450.00 in revenue has no payment method recorded — update Sheets
+2026-07-10 17:59:48 — [INFO] Scanning for upcoming birthdays
+2026-07-10 17:59:48 — [INFO] Birthday alert: Mareli Koh — birthday on 10/07 (within 7 days)
+2026-07-10 17:59:48 — [INFO] Birthday alert: Venus Noh — birthday on 11/07 (within 7 days)
+2026-07-10 17:59:48 — [INFO] Birthday alerts generated for 2 client(s): Mareli Koh, Venus Noh
+2026-07-10 17:59:48 — [INFO] Scanning for upcoming retouching appointments
+2026-07-10 17:59:48 — [INFO] Retouching reminder: Valeria Loeza — 'Pestañas — Retoque 15 días' in 0 day(s) (10/07/2026)
+2026-07-10 17:59:48 — [INFO] Retouching reminder: Clarisa Calderón — 'Pestañas — Retoque 20 días' in 1 day(s) (11/07/2026)
+2026-07-10 17:59:48 — [INFO] Generating daily report — report_2026-07-10.log
+2026-07-10 17:59:48 — [INFO] Report written successfully — report_2026-07-10.log
+2026-07-10 17:59:48 — [INFO] Pipeline completed successfully
+2026-07-10 17:59:48 — [INFO] ========================================================
