@@ -1,0 +1,26 @@
+# Spanish Verb Conjugator - Pseudocode
+# Classwork 09
+# Data and Artificial Intelligence Engineering - UPY
+
+# INPUT
+Ask the user to enter a verb in infinitive form
+verb <- user input
+
+# PROCESS
+pronouns <- ['yo', 'tu', 'el', 'nosotros', 'vosotros', 'ellos']
+
+endings <- dictionary {
+    'ar' : ['o', 'as', 'a', 'amos', 'ais', 'an'],
+    'er' : ['o', 'es', 'e', 'emos', 'eis', 'en'],
+    'ir' : ['o', 'es', 'e', 'imos', 'is', 'en']
+}
+
+stem <- verb minus its last 2 characters
+verb_ending <- last 2 characters of verb
+conjugations <- endings[verb_ending]
+
+FOR i <- 0 TO 5
+    conjugated_form <- stem + conjugations[i]
+    # OUTPUT
+    Print pronouns[i] + " " + conjugated_form
+END FOR
