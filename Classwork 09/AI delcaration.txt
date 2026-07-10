@@ -1,0 +1,15 @@
+========================================
+AI USE DECLARATION
+========================================
+Student name: Cristian Alejandro Cab Xool
+AI used: Claude
+Date of use: 2026-07-10
+Purpose: Assistance generating the flowchart image and the corresponding
+pseudocode (PPP) for the verb conjugation program (conjugating verbs
+ending in -ar, -er, -ir across the six pronouns yo, tu, el, nosotros,
+vosotros, ellos).
+Prompt used (summary): I asked for help creating a flowchart and the PPP
+(INPUT/PROCESS/OUTPUT pseudocode with numbered steps and arrows) that
+matched the logic of my existing Python verb conjugation program.
+Note: I reviewed the flowchart and pseudocode myself and confirmed they
+match the logic of my own code before submitting it.
