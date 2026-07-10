@@ -1,18 +1,24 @@
+# ==========================================
 # INPUT
 # ==========================================
 try:
-    rol_input = input("Introduce el rol (ej. 201012341): ").strip()
-    
-    if not rol_input:
-        raise ValueError("El campo de entrada no puede estar vacío.")
-        
-    if not rol_input.isdigit():
-        raise ValueError("El rol debe contener únicamente caracteres numéricos (0-9).")
+    entrada = input("Introduce el rol con dígito verificador (ej. 123456789-2): ").strip()
 
-    rol = rol_input
+    partes = [p.strip() for p in entrada.split("-")]
+
+    if len(partes) != 2 or partes[0] == "" or partes[1] == "":
+        raise ValueError("Rol inválido: No tiene el formato XXXXXXXXX-X")
+
+    rol, dv_ingresado = partes
+
+    if not rol.isdigit():
+        raise ValueError("Los digitos del rol deben ser numéricos")
+
+    if not (dv_ingresado.isdigit() or dv_ingresado.upper() == "K"):
+        raise ValueError("El digito verificador debe ser numérico")
 
 except ValueError as e:
-    print(f"Error de Validación de Entrada: {e}")
+    print(e)
     exit()
 
 # ==========================================
@@ -24,22 +30,25 @@ for digito in rol[::-1]:
 
 secuencia = [2, 3, 4, 5, 6, 7]
 suma_total = 0
-
 for i in range(len(rol_invertido)):
-    multiplicador = sequence = secuencia[i % 6]
+    multiplicador = secuencia[i % 6]
     suma_total += rol_invertido[i] * multiplicador
 
 modulo = suma_total % 11
 resta = 11 - modulo
 
 if resta == 11:
-    dv = "0"
+    dv_esperado = "0"
 elif resta == 10:
-    dv = "K"
+    dv_esperado = "K"
 else:
-    dv = str(resta)
+    dv_esperado = str(resta)
 
 # ==========================================
 # OUTPUT
 # ==========================================
-print(f"Resultado: {rol}-{dv}")
+if dv_ingresado.upper() != dv_esperado:
+    print(f"Error: El dígito verificador no conicide, se esperaba {dv_esperado}")
+    exit()
+
+print(f"{rol}-{dv_esperado}")
