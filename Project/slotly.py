@@ -9,7 +9,9 @@ This script simulates the core data pipeline:
   4. Detect upcoming birthdays and retouching reminders
   5. Generate a summary report
 
-All key events, warnings, and errors are logged to /logs/app.log
+Logging strategy — two persistent files, both in APPEND mode (never overwritten):
+  - logs/app.log          → full cumulative log of every run, forever
+  - logs/YYYY-MM-DD.log   → one file per day, all runs of that day combined
 """
 
 import logging
@@ -18,26 +20,49 @@ import csv
 import json
 from datetime import datetime, timedelta
 from pathlib import Path
+from logging.handlers import RotatingFileHandler
 
 # ─────────────────────────────────────────────────────────
-# LOGGING SETUP
+# LOGGING SETUP — persistent, append-only, never deleted
 # ─────────────────────────────────────────────────────────
 LOGS_DIR = Path(__file__).parent / "logs"
 LOGS_DIR.mkdir(exist_ok=True)
 
-LOG_FILE = LOGS_DIR / "app.log"
+# app.log — accumulates EVERY run ever, forever
+APP_LOG = LOGS_DIR / "app.log"
 
-logging.basicConfig(
-    level=logging.DEBUG,
-    format="%(asctime)s — [%(levelname)s] %(message)s",
-    datefmt="%Y-%m-%d %H:%M:%S",
-    handlers=[
-        logging.FileHandler(LOG_FILE, encoding="utf-8"),
-        logging.StreamHandler()
-    ]
-)
+# YYYY-MM-DD.log — one file per calendar day, all runs of that day
+TODAY_LOG = LOGS_DIR / f"{datetime.today().strftime('%Y-%m-%d')}.log"
 
+LOG_FORMAT  = "%(asctime)s — [%(levelname)s] %(message)s"
+DATE_FORMAT = "%Y-%m-%d %H:%M:%S"
+
+# Root logger
 logger = logging.getLogger("sam_beauty")
+logger.setLevel(logging.DEBUG)
+
+# Handler 1 — app.log, append mode, max 5 MB then rotates to app.log.1 etc.
+# This keeps the file manageable while never losing history.
+fh_app = RotatingFileHandler(
+    APP_LOG,
+    mode="a",           # append — never overwrites
+    maxBytes=5_000_000, # rotate at 5 MB
+    backupCount=10,     # keep up to 10 rotated files
+    encoding="utf-8"
+)
+fh_app.setFormatter(logging.Formatter(LOG_FORMAT, DATE_FORMAT))
+
+# Handler 2 — YYYY-MM-DD.log, plain append, one file per day
+fh_day = logging.FileHandler(TODAY_LOG, mode="a", encoding="utf-8")
+fh_day.setFormatter(logging.Formatter(LOG_FORMAT, DATE_FORMAT))
+
+# Handler 3 — console output
+sh = logging.StreamHandler()
+sh.setFormatter(logging.Formatter(LOG_FORMAT, DATE_FORMAT))
+
+logger.addHandler(fh_app)
+logger.addHandler(fh_day)
+logger.addHandler(sh)
 
 # ─────────────────────────────────────────────────────────
 # MOCK DATA — simulates what the Google Sheets webhook
@@ -349,8 +374,9 @@ def main():
     logger.info("Pipeline completed successfully")
     logger.info("=" * 56)
 
-    print(f"\n✓ Log written to  : {LOG_FILE}")
-    print(f"✓ Report written to: {report_path}")
+    print(f"\n✓ app.log         : {APP_LOG}")
+    print(f"✓ Daily log       : {TODAY_LOG}")
+    print(f"✓ Report          : {report_path}")
 
 
 if __name__ == "__main__":
