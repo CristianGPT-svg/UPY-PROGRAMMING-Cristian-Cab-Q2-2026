@@ -1,7 +1,7 @@
+# ==========================================
 # INPUT
 # ==========================================
-pronombres = ['yo', 'tu', 'el', 'nosotros', 'vosotros', 'ellos']
-
+pronombres = ['yo', 'tú', 'él', 'nosotros', 'vosotros', 'ellos']
 terminaciones = {
     'ar': ['o', 'as', 'a', 'amos', 'ais', 'an'],
     'er': ['o', 'es', 'e', 'emos', 'eis', 'en'],
@@ -9,32 +9,28 @@ terminaciones = {
 }
 
 try:
-    verbo = input("Ingrese un verbo regular en infinitivo: ").strip().lower()
-    
-    if not verbo:
-        raise ValueError("La entrada no puede estar vacía.")
-        
-    if not verbo.isalpha():
-        raise ValueError("El verbo debe contener únicamente letras (sin números ni caracteres especiales).")
+    verbo = input("Ingrese un verbo regular en infinitivo: ")
 
-    if len(verbo) < 3:
-        raise ValueError("El verbo ingresado es demasiado corto para ser un infinitivo válido.")
+    if verbo != verbo.strip():
+        raise ValueError("El verbo no debe tener espacios extra")
+
+    if verbo != verbo.lower():
+        raise ValueError("El verbo debe escribirse en minúsculas")
 
     stem = verbo[:-2]
     ending = verbo[-2:]
+    lista_sufijos = terminaciones[ending]
 
-    if ending not in terminaciones:
-        raise KeyError(f"La terminación '-{ending}' no es válida. El verbo debe terminar en -ar, -er o -ir.")
-
-except (ValueError, KeyError) as e:
+except ValueError as e:
     print(f"Error de Validación: {e}")
+    exit()
+except KeyError:
+    print("Error de Validación: El verbo debe terminar en ar, er o ir")
     exit()
 
 # ==========================================
 # PROCESS & OUTPUT
 # ==========================================
-lista_sufijos = terminaciones[ending]
-
 print(f"\nConjugación en presente para el verbo '{verbo}':")
 for i in range(len(pronombres)):
     pronoun = pronombres[i]
