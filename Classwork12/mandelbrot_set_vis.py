@@ -31,7 +31,7 @@ for dato in datos:
     img.putpixel((columna,fila), (brillo, 255, 255))
     
 img_rgb = img.convert('RGB')
-img_rgb.save("madelbrot.png")
+img_rgb.save("mandelbrot.png")
 
 print("DONE")
 
